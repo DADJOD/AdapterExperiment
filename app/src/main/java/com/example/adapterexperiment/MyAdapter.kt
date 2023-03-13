@@ -1,6 +1,5 @@
 package com.example.adapterexperiment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -29,21 +28,39 @@ class MyAdapter : BaseAdapter() {
         return 0
     }
 
-    @SuppressLint("ViewHolder")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             inflater = parent!!.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        val itemView = inflater.inflate(R.layout.item_layout, parent, false)
+        val itemView : View
+        val myHolder : MyHolder
+        if (convertView == null) {
+            itemView = inflater.inflate(R.layout.item_layout, parent, false)
+            val data1 = itemView.findViewById<TextView>(R.id.data1)
+            val data2 = itemView.findViewById<TextView>(R.id.data2)
+            val data3 = itemView.findViewById<TextView>(R.id.data3)
+            myHolder = MyHolder(data1, data2, data3)
+            itemView.tag = myHolder     // saved myHolder for the future
+        } else {
+            itemView = convertView
+            myHolder = convertView.tag as MyHolder      // the future has come, got myHolder
+        }
 
-        val data1 = itemView.findViewById<TextView>(R.id.data1)
-        val data2 = itemView.findViewById<TextView>(R.id.data2)
-        val data3 = itemView.findViewById<TextView>(R.id.data3)
+//        val itemView : View = convertView ?: inflater.inflate(R.layout.item_layout, parent, false) // for help our GarbageCollector
+
+
+//        val data1 = itemView.findViewById<TextView>(R.id.data1)
+//        val data2 = itemView.findViewById<TextView>(R.id.data2)
+//        val data3 = itemView.findViewById<TextView>(R.id.data3)
 
         val item = getItem(position) as String
-        data1.text = item
-        data2.text = item.uppercase()
-        data2.text = item.lowercase()
+        myHolder.data1.text = item
+        myHolder.data2.text = item.uppercase()
+        myHolder.data3.text = item.lowercase()
 
         return itemView
+    }
+
+    class MyHolder(val data1: TextView, val data2: TextView, val data3: TextView) {
+
     }
 }

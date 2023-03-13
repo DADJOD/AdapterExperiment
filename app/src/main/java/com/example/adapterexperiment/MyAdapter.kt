@@ -39,6 +39,15 @@ class MyAdapter : BaseAdapter() {
             val data2 = itemView.findViewById<TextView>(R.id.data2)
             val data3 = itemView.findViewById<TextView>(R.id.data3)
             myHolder = MyHolder(data1, data2, data3)
+
+            data1.setOnClickListener() {
+                if (data2.visibility == View.VISIBLE) {
+                    data2.visibility = View.GONE
+                } else {
+                    data2.visibility = View.VISIBLE
+                }
+            }
+
             itemView.tag = myHolder     // saved myHolder for the future
         } else {
             itemView = convertView
